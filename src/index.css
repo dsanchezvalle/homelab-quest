@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Los colores son variables CSS para que el modo oscuro sea
+ * solo un cambio de valores (no hay que duplicar clases `dark:` por todos lados).
+ * `data-theme` en <html> fuerza claro/oscuro; sin él, se sigue al sistema.
+ */
+:root {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef2f7;
+  --border: #dde3ec;
+  --fg: #0f172a;
+  --muted: #5a6477;
+  --brand: #2496ed;
+  --brand-strong: #1673bd;
+  --brand-soft: #e3f1fd;
+  --success: #1c9d5c;
+  --success-strong: #147a47;
+  --success-soft: #e2f6ea;
+  --danger: #dc3c42;
+  --danger-strong: #a92a2f;
+  --danger-soft: #fdeaea;
+  --warn: #d98a06;
+  --warn-soft: #fff4dc;
+  --xp: #f2a20c;
+  --code-bg: #0f172a;
+  --code-fg: #e2e8f0;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f1c;
+    --surface: #111a2c;
+    --surface-2: #18233a;
+    --border: #25324c;
+    --fg: #e7ecf5;
+    --muted: #97a3ba;
+    --brand: #3aa6ff;
+    --brand-strong: #1e7fd0;
+    --brand-soft: #10263f;
+    --success: #34c07a;
+    --success-strong: #1f8f57;
+    --success-soft: #0f2a1d;
+    --danger: #ff6b70;
+    --danger-strong: #c9444a;
+    --danger-soft: #311519;
+    --warn: #f5b93b;
+    --warn-soft: #2e2410;
+    --xp: #ffb938;
+    --code-bg: #070b15;
+    --code-fg: #e2e8f0;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a0f1c;
+  --surface: #111a2c;
+  --surface-2: #18233a;
+  --border: #25324c;
+  --fg: #e7ecf5;
+  --muted: #97a3ba;
+  --brand: #3aa6ff;
+  --brand-strong: #1e7fd0;
+  --brand-soft: #10263f;
+  --success: #34c07a;
+  --success-strong: #1f8f57;
+  --success-soft: #0f2a1d;
+  --danger: #ff6b70;
+  --danger-strong: #c9444a;
+  --danger-soft: #311519;
+  --warn: #f5b93b;
+  --warn-soft: #2e2410;
+  --xp: #ffb938;
+  --code-bg: #070b15;
+  --code-fg: #e2e8f0;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-strong: var(--danger-strong);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-xp: var(--xp);
+  --color-code-bg: var(--code-bg);
+  --color-code-fg: var(--code-fg);
+  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* ── Resaltado de sintaxis (ui/highlight.ts) ─────────────────────────── */
+.tok-cmd { color: #7dd3fc; font-weight: 600; }
+.tok-flag { color: #fbbf24; }
+.tok-str { color: #86efac; }
+.tok-com { color: #64748b; font-style: italic; }
+.tok-var { color: #f0abfc; }
+.tok-key { color: #7dd3fc; }
+.tok-lit { color: #fda4af; }
+.tok-op { color: #94a3b8; }
+
+/* ── Flip card (features/lesson/FlipCard.tsx) ────────────────────────── */
+.flip { perspective: 1000px; }
+.flip-inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.flip[data-flipped="true"] .flip-inner { transform: rotateY(180deg); }
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back { transform: rotateY(180deg); }
+
+/* ── Diagrama: aristas activas "fluyen" ──────────────────────────────── */
+@keyframes flow { to { stroke-dashoffset: -24; } }
+.edge-active { stroke-dasharray: 6 6; animation: flow 1.2s linear infinite; }
+
+@keyframes pop { 0% { transform: scale(0.96); } 60% { transform: scale(1.03); } 100% { transform: scale(1); } }
+.animate-pop { animation: pop 0.25s ease-out; }
+
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.animate-shake { animation: shake 0.25s ease-in-out 2; }
+
+@keyframes bob { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -4px); } }
+.animate-bob { animation: bob 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Markdown dentro de las lecciones */
+.prose-lesson p { margin: 0.6em 0; line-height: 1.6; }
+.prose-lesson ul, .prose-lesson ol { margin: 0.6em 0; padding-left: 1.3em; }
+.prose-lesson ul { list-style: disc; }
+.prose-lesson ol { list-style: decimal; }
+.prose-lesson li { margin: 0.25em 0; line-height: 1.55; }
+.prose-lesson strong { font-weight: 800; }
+.prose-lesson a { color: var(--brand); text-decoration: underline; text-underline-offset: 2px; }
+.prose-lesson :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.05em 0.35em;
+  overflow-wrap: anywhere;
+}
+.prose-lesson table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin: 0.8em 0; }
+.prose-lesson th, .prose-lesson td { border: 1px solid var(--border); padding: 0.45em 0.6em; text-align: left; vertical-align: top; }
+.prose-lesson th { background: var(--surface-2); font-weight: 800; }
+.prose-lesson .table-wrap { overflow-x: auto; }
